@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditorActivity">
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="20dp">
+
+        <EditText
+            android:id="@+id/et_title"
+            android:hint="@string/to_do"
+            android:textSize="25sp"
+            android:inputType="textCapCharacters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="Autofill" />
+        <EditText
+            android:id="@+id/et_note"
+            android:layout_below="@id/et_title"
+            android:hint="@string/enter_note"
+            android:inputType="textMultiLine"
+            android:minLines="6"
+            android:gravity="top|start"
+            android:layout_marginTop="20dp"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </RelativeLayout>
+
+
+</androidx.core.widget.NestedScrollView>
