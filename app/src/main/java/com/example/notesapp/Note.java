@@ -49,7 +49,7 @@ public class Note {
         this.color = color;
     }
 
-    public boolean isSuccess() {
+    public boolean getSuccess() {
         return success;
     }
 

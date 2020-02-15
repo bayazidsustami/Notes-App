@@ -76,7 +76,7 @@ public class EditorActivity extends AppCompatActivity {
                 progressDialog.dismiss();
 
                 if (response.isSuccessful() && response.body() != null){
-                    Boolean success = response.body().isSuccess();
+                    Boolean success = response.body().getSuccess();
                     if (success){
                         Toast.makeText(EditorActivity.this,
                                 response.body().getMessage(),
