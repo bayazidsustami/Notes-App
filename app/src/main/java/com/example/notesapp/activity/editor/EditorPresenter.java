@@ -1,7 +1,5 @@
 package com.example.notesapp.activity.editor;
 
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 
 import com.example.notesapp.api.ApiClient;

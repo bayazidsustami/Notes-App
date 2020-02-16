@@ -10,6 +10,10 @@
     <color name="yellow">#d0fc7d</color>
     <color name="pink">#ed579a</color>
     <color name="green">#2aed76</color>
+    <color name="black">#0f0f0f</color>
+
+    <color name="blue_dark">#0080ff</color>
+    <color name="blue_dark_transparent">#BF0080ff</color>
 
     <array name="demo_colors">
         <item>@color/white</item>
