@@ -1,4 +1,6 @@
-package com.example.notesapp;
+package com.example.notesapp.api;
+
+import com.example.notesapp.model.Note;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
