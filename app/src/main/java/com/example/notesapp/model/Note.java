@@ -13,6 +13,8 @@ public class Note {
     @Expose
     @SerializedName("color") private int color;
     @Expose
+    @SerializedName("date") private String date;
+    @Expose
     @SerializedName("success") private boolean success;
     @Expose
     @SerializedName("message") private String message;
@@ -47,6 +49,13 @@ public class Note {
 
     public void setColor(int color) {
         this.color = color;
+    }
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public boolean getSuccess() {
