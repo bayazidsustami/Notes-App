@@ -23,6 +23,7 @@ public class EditorPresenter {
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
         Call<Note> call = apiInterface.saveNote(title, note, color);
 
+        //call menggunakan retrofit
         call.enqueue(new Callback<Note>() {
             @Override
             public void onResponse(@NonNull Call<Note> call, @NonNull Response<Note> response) {
