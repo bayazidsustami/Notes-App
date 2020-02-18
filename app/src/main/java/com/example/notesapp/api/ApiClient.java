@@ -4,7 +4,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
-    private static final String BASE_URL = "http://192.168.1.19/note_app/"; //my base url using localhost
+    private static final String BASE_URL = "http://10.163.1.17/note_app/"; //my base url using localhost
     private static Retrofit retrofit;
 
     public static Retrofit getApiClient(){
