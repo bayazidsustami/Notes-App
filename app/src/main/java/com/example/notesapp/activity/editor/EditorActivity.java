@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,7 +30,10 @@ public class EditorActivity extends AppCompatActivity implements EditorView {
 
     EditorPresenter presenter;
 
-    int color;
+    int color, id;
+    String title, note;
+
+    Menu actionMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,38 +46,73 @@ public class EditorActivity extends AppCompatActivity implements EditorView {
 
         palette.setOnColorSelectedListener(clr -> color =clr);
 
-        //default color setup
-        palette.setSelectedColor(getResources().getColor(R.color.white));
-        color = getResources().getColor(R.color.white);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please Wait ...");
 
         presenter = new EditorPresenter(this);
+
+        Intent intent = getIntent();
+        id = intent.getIntExtra("id", 0);
+        title = intent.getStringExtra("title");
+        note = intent.getStringExtra("note");
+        color = intent.getIntExtra("color",0);
+
+        setDataFromIntentExtra();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_editor, menu);
+        actionMenu = menu;
+
+        if (id != 0){
+            actionMenu.findItem(R.id.edit).setVisible(true);
+            actionMenu.findItem(R.id.delete).setVisible(true);
+            actionMenu.findItem(R.id.save).setVisible(false);
+            actionMenu.findItem(R.id.update).setVisible(false);
+        } else {
+            actionMenu.findItem(R.id.edit).setVisible(false);
+            actionMenu.findItem(R.id.delete).setVisible(false);
+            actionMenu.findItem(R.id.save).setVisible(true);
+            actionMenu.findItem(R.id.update).setVisible(false);
+        }
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        String title = et_title.getText().toString().trim();
+        String note = et_note.getText().toString().trim();
+        int color = this.color;
+
         switch (item.getItemId()){
             case R.id.save:
-
-                String title = et_title.getText().toString().trim();
-                String note = et_note.getText().toString().trim();
-                int color = this.color;
-
                 if (title.isEmpty()){
                     et_title.setError("Please enter a title");
                 } else if (note.isEmpty()){
                     et_note.setError("Please enter a note");
                 } else {
                     presenter.saveNote(title, note, color);
+                }
+                return true;
+            case R.id.edit:
+                editMode();
+                actionMenu.findItem(R.id.edit).setVisible(false);
+                actionMenu.findItem(R.id.delete).setVisible(false);
+                actionMenu.findItem(R.id.save).setVisible(false);
+                actionMenu.findItem(R.id.update).setVisible(true);
+                return true;
+            case R.id.update:
+                //update
+                if (title.isEmpty()){
+                    et_title.setError("Please enter a title");
+                } else if (note.isEmpty()){
+                    et_note.setError("Please enter a note");
+                } else {
+                    presenter.updateNote(id, title, note, color);
                 }
                 return true;
             default:
@@ -92,13 +131,45 @@ public class EditorActivity extends AppCompatActivity implements EditorView {
     }
 
     @Override
-    public void onAddSuccess(String message) {
+    public void onRequestSuccess(String message) {
         Toast.makeText(EditorActivity.this, message, Toast.LENGTH_SHORT).show();
+        setResult(RESULT_OK);
         finish(); //kembali ke main activity
     }
 
     @Override
-    public void onAddError(String message) {
+    public void onRequestError(String message) {
         Toast.makeText(EditorActivity.this, message, Toast.LENGTH_SHORT).show();
     }
+
+    private void setDataFromIntentExtra() {
+        if (id !=0){
+            et_title.setText(title);
+            et_note.setText(note);
+            palette.setSelectedColor(color);
+
+            getSupportActionBar().setTitle("Update Note");
+            readMode();
+        } else {
+            palette.setSelectedColor(getResources().getColor(R.color.white));
+            color = getResources().getColor(R.color.white);
+            getSupportActionBar().setTitle("Add Notes");
+            editMode();
+        }
+    }
+
+    private void editMode() {
+        et_title.setFocusableInTouchMode(true);
+        et_note.setFocusableInTouchMode(true);
+        palette.setEnabled(true);
+    }
+
+    private void readMode() {
+        et_title.setFocusableInTouchMode(false);
+        et_note.setFocusableInTouchMode(false);
+        et_title.setFocusable(false);
+        et_note.setFocusable(false);
+        palette.setEnabled(false);
+    }
+
 }
