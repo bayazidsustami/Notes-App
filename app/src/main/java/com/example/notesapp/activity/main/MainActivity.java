@@ -1,5 +1,6 @@
 package com.example.notesapp.activity.main;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.notesapp.R;
 import com.example.notesapp.activity.editor.EditorActivity;
+import com.example.notesapp.activity.editor.EditorView;
 import com.example.notesapp.model.Note;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -19,6 +21,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MainView {
 
+    private static final int INTENT_EDIT = 200;
+    private static final int INTENT_ADD = 100;
     FloatingActionButton fab;
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefresh;
@@ -42,7 +46,10 @@ public class MainActivity extends AppCompatActivity implements MainView {
         fab = findViewById(R.id.add);
 
         fab.setOnClickListener(view ->
-            startActivity(new Intent(this, EditorActivity.class)));
+            startActivityForResult(
+                    new Intent(this, EditorActivity.class),
+                    INTENT_ADD)
+        );
 
         presenter = new MainPresenter(this);
         presenter.getDate();
@@ -50,9 +57,30 @@ public class MainActivity extends AppCompatActivity implements MainView {
         swipeRefresh.setOnRefreshListener(() -> presenter.getDate());
 
         itemClickListener = ((view, position) -> {
+            int id = note.get(position).getId();
             String title = note.get(position).getTitle();
-            Toast.makeText(this, title, Toast.LENGTH_SHORT).show();
+            String notes = note.get(position).getTitle();
+            int color = note.get(position).getColor();
+
+            Intent intent = new Intent(this, EditorActivity.class);
+            intent.putExtra("id", id);
+            intent.putExtra("title", title);
+            intent.putExtra("note", notes);
+            intent.putExtra("color", color);
+            startActivityForResult(intent, INTENT_EDIT);
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == INTENT_ADD && resultCode == RESULT_OK){
+            presenter.getDate(); //reload data
+        } else if (requestCode == INTENT_EDIT && resultCode == RESULT_OK){
+            presenter.getDate(); //reload data
+        }
+
     }
 
     @Override
