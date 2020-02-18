@@ -3,7 +3,9 @@ package com.example.notesapp.activity.editor;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -114,6 +116,17 @@ public class EditorActivity extends AppCompatActivity implements EditorView {
                 } else {
                     presenter.updateNote(id, title, note, color);
                 }
+                return true;
+            case R.id.delete:
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+                alertDialog.setTitle("Confirm !");
+                alertDialog.setMessage("Are You Sure ?");
+                alertDialog.setNegativeButton("Yes", (dialog, which) ->{
+                        dialog.dismiss();
+                        presenter.deleteNote(id);
+                });
+                alertDialog.setPositiveButton("Cancel", (dialog, which) -> dialog.dismiss());
+                alertDialog.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
